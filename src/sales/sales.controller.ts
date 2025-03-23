@@ -1,34 +1,72 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { SalesService } from './sales.service';
-import { CreateSaleDto } from './dto/create-sale.dto';
-import { UpdateSaleDto } from './dto/update-sale.dto';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UsePipes, ValidationPipe } from '@nestjs/common';
+import { CreateSaleDto } from './dto/createSale.dto';
+import { UpdateSaleDto } from './dto/updateSale.dto';
+import {
+  ApiOperation,
+  ApiParam,
+  ApiBody,
+  ApiResponse,
+  ApiTags,
+  ApiQuery,
+ } from '@nestjs/swagger';
+import { SaleService } from './sales.service';
+import { SaleEntity } from './entities/sale.entity';
 
+@ApiTags('Sales api')
 @Controller('sales')
 export class SalesController {
-  constructor(private readonly salesService: SalesService) {}
+  constructor(private readonly SaleService: SaleService) {}
 
+  @ApiOperation({ summary: 'Create a new Sale' })
+  @ApiBody({ type: CreateSaleDto })
+  @ApiResponse({ status: 201, description: 'new Sale' })
   @Post()
-  create(@Body() createSaleDto: CreateSaleDto) {
-    return this.salesService.create(createSaleDto);
+  @UsePipes(ValidationPipe) 
+  async create(@Body() createSaleDto: CreateSaleDto):  Promise<SaleEntity> {
+    return await this.SaleService.create(createSaleDto);
   }
 
+  @ApiOperation({ summary: 'List all Sales' })
+  @ApiResponse({
+      status: 200,
+      description: 'List of Sales',
+      type: [SaleEntity],
+    })
   @Get()
-  findAll() {
-    return this.salesService.findAll();
+  async findAll()  : Promise<SaleEntity[]> {
+    return await this.SaleService.findAll();
   }
 
+  @ApiOperation({ summary: 'Get Sales by ID' })
+  @ApiParam({ name: 'id', type: String })
+  @ApiResponse({ status: 200, description: 'Sales details', 
+      type: SaleEntity })  
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.salesService.findOne(+id);
+  async findOne(@Param('id') id: number) {
+    return await this.SaleService.findOne(id);
   }
 
+  @ApiOperation({ summary: 'Update a Sale' })
+  @ApiParam({ name: 'id', type: String })
+  @ApiResponse({ status: 200, description: 'Update Sale', 
+      type: SaleEntity })  
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSaleDto: UpdateSaleDto) {
-    return this.salesService.update(+id, updateSaleDto);
+  async update(@Param('id') id: number, @Body() updateSaleDto: UpdateSaleDto) {
+    return await this.SaleService.update(+id, updateSaleDto);
   }
 
+  @ApiOperation({ summary: 'Delete Sale by ID' })
+  @ApiParam({ name: 'id', type: String })
+  @ApiQuery({ name: 'usuario', type: String, description: 'Usuario que realiza la eliminación' })
+  @ApiQuery({ name: 'terminal', type: String, description: 'Terminal desde donde se realiza la eliminación' })
+  @ApiResponse({ status: 200, description: 'Delete Sale', 
+      type: SaleEntity })  
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.salesService.remove(+id);
+  async remove(
+    @Param('id') id: string,    
+    @Query('usuario') usuario: string,
+    @Query('terminal') terminal: string,
+) {
+    return await this.SaleService.remove(+id,usuario,terminal);
   }
 }
