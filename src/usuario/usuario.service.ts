@@ -30,6 +30,21 @@ export class UsuarioService {
     return Usuario;
   }
 
+  async findLogin(usuario: String,pass: String): Promise<UsuarioEntity> {    
+
+   const usuarioEncontrado = await this.usuarioRepository.findOneBy({
+     userName: usuario,
+     password: pass,
+   });
+   
+
+   if (!usuarioEncontrado) {
+     throw new Error(`Usuario con login ${usuarioEncontrado} no encontrado`);
+   }
+
+   return usuarioEncontrado;
+ }
+
   async findOne(id: number): Promise<UsuarioEntity> {
     const Usuario = await this.usuarioRepository.findOne({
       where: { idUsuario: id },
@@ -42,30 +57,7 @@ export class UsuarioService {
     return Usuario;
   }
 
-    async findLogin(usuario: String,pass: String): Promise<UsuarioEntity[]> {    
 
-       console.log("usuario:" , usuario);
-       console.log("password:" , pass);
-
-       const usuarioEncontrado = await this.usuarioRepository.find({
-        where: { userName: usuario, password: pass },
-      });
-
-      
-
-      /*
-      const usuarioEncontrado = await this.usuarioRepository.findOneBy({
-        userName: usuario,
-        password: password,
-      });
-      */
-  
-      if (!usuarioEncontrado) {
-        throw new Error(`Usuario con login ${usuarioEncontrado} no encontrado`);
-      }
-  
-      return usuarioEncontrado;
-    }
 
   async update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
    // Verificar si el producto existe

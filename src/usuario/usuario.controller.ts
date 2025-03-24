@@ -39,6 +39,18 @@ export class UsuarioController {
     return await this.usuarioService.findAll();
   }
 
+  
+ @ApiOperation({ summary: 'Login Usuario' })
+ @ApiResponse({ status: 200, description: 'Usuario Login' })    
+ @Get('login')              
+    async findLogin(
+      @Query('usuario') userName: string,
+      @Query('terminal') password: string,
+
+    ) {
+      return await this.usuarioService.findLogin(userName, password);
+    }
+
   @ApiOperation({ summary: 'Get Usuario by ID' })
   @ApiParam({ name: 'id', type: String })
   @ApiResponse({ status: 200, description: 'Usuario details', 
@@ -72,33 +84,6 @@ export class UsuarioController {
   ) {
     return await this.usuarioService.remove(+id,usuario,terminal);
   }
-
-
-
-    @ApiOperation({ summary: 'Login Usuario' })
-    @ApiResponse({ status: 200, description: 'Usuario Login', type: UsuarioEntity })
-    @Get('login')      
-    async findLogin(@Query() query: LoginDto) {
-
-      console.log("usuario 1:" , query.userName);
-      console.log("password 1:" , query.password);
-
-      return await this.usuarioService.findLogin(query.userName, query.password);
-    }
-
-    @ApiOperation({ summary: 'Login Usuario2' })
-    @ApiResponse({ status: 200, description: 'Usuario Login2' })    
-    @Get('login2')              
-    async findLogin2(
-      @Query('usuario') userName: string,
-      @Query('terminal') password: string,
-
-    ) {
-      console.log("usuario 1:" , userName);
-      console.log("password 1:" , password);     
-
-      return await this.usuarioService.findLogin(userName, password);
-    }
 
 
 
