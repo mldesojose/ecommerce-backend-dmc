@@ -1,4 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, Query } from '@nestjs/common';
+
 import { CreateUsuarioDto } from './dto/createUsuario.dto';
 import { UpdateUsuarioDto } from './dto/updateUsuario.dto';
 import {
@@ -9,13 +10,14 @@ import {
   ApiTags,
   ApiQuery,
  } from '@nestjs/swagger';
+import { UsuarioService } from './usuario.service';
 import { UsuarioEntity } from './entities/usuario.entity';
-import { UsuarioService } from './usuario.Service';
+import { LoginDto } from './dto/Login.dto';
 
 @ApiTags('Usuario api')
 @Controller('Usuario')
 export class UsuarioController {
-  constructor(private readonly UsuarioService: UsuarioService) {}
+  constructor(private readonly usuarioService: UsuarioService) {}
 
   @ApiOperation({ summary: 'Create a new Usuario' })
   @ApiBody({ type: CreateUsuarioDto })
@@ -23,7 +25,7 @@ export class UsuarioController {
   @Post()
   @UsePipes(ValidationPipe) 
   async create(@Body() createUsuarioDto: CreateUsuarioDto):  Promise<UsuarioEntity> {
-    return await this.UsuarioService.create(createUsuarioDto);
+    return await this.usuarioService.create(createUsuarioDto);
   }
 
   @ApiOperation({ summary: 'List all Usuario' })
@@ -34,7 +36,7 @@ export class UsuarioController {
     })
   @Get()
   async findAll() : Promise<UsuarioEntity[]> {
-    return await this.UsuarioService.findAll();
+    return await this.usuarioService.findAll();
   }
 
   @ApiOperation({ summary: 'Get Usuario by ID' })
@@ -43,19 +45,7 @@ export class UsuarioController {
     type: UsuarioEntity })  
   @Get(':id')
   async findOne(@Param('id') id: number) {
-    return await this.UsuarioService.findOne(id);
-  }
-
-  @ApiOperation({ summary: 'Get Usuario Login' })
-  @ApiQuery({ name: 'usuario', type: String, description: 'Usuario que se Logea' })
-  @ApiQuery({ name: 'password', type: String, description: 'Contraseña de Usuario' })
-  @ApiResponse({ status: 200, description: 'Usuario Login', 
-    type: UsuarioEntity })    
-  async findLogin(
-    @Query('usuario') usuario: string,
-    @Query('password') password: string,
-  ) {
-    return await this.UsuarioService.findLogin(usuario,password);
+    return await this.usuarioService.findOne(id);
   }
 
 
@@ -65,7 +55,7 @@ export class UsuarioController {
     type: UsuarioEntity })  
   @Patch(':id')
   async update(@Param('id') id: number, @Body() updateUsuarioDto: UpdateUsuarioDto) {
-    return await this.UsuarioService.update(id, updateUsuarioDto);
+    return await this.usuarioService.update(id, updateUsuarioDto);
   }
 
   @ApiOperation({ summary: 'Delete Usuario by ID' })
@@ -80,6 +70,36 @@ export class UsuarioController {
     @Query('usuario') usuario: string,
     @Query('terminal') terminal: string,
   ) {
-    return await this.UsuarioService.remove(+id,usuario,terminal);
+    return await this.usuarioService.remove(+id,usuario,terminal);
   }
+
+
+
+    @ApiOperation({ summary: 'Login Usuario' })
+    @ApiResponse({ status: 200, description: 'Usuario Login', type: UsuarioEntity })
+    @Get('login')      
+    async findLogin(@Query() query: LoginDto) {
+
+      console.log("usuario 1:" , query.userName);
+      console.log("password 1:" , query.password);
+
+      return await this.usuarioService.findLogin(query.userName, query.password);
+    }
+
+    @ApiOperation({ summary: 'Login Usuario2' })
+    @ApiResponse({ status: 200, description: 'Usuario Login2' })    
+    @Get('login2')              
+    async findLogin2(
+      @Query('usuario') userName: string,
+      @Query('terminal') password: string,
+
+    ) {
+      console.log("usuario 1:" , userName);
+      console.log("password 1:" , password);     
+
+      return await this.usuarioService.findLogin(userName, password);
+    }
+
+
+
 }

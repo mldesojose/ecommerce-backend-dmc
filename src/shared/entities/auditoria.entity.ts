@@ -7,13 +7,16 @@ import {
   
   export class AuditoriaEntity {
    
-    @Column({name: "usuario_creacion", default: "ADMIN"})  
+    //@Column({name: "usuario_creacion", default: "ADMIN"})  
+    @Column({name: "usuario_creacion"})
     usuarioCreacion: String;
   
-    @CreateDateColumn({ name: "fecha_creacion", type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+    //@CreateDateColumn({ name: "fecha_creacion", type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+    @Column({name: "fecha_creacion"})
     fechaCreacion: Date;
     
-    @Column({name: "terminal_creacion", default: "192.168.1.1"})
+    //@Column({name: "terminal_creacion", default: "192.168.1.1"})
+    @Column({name: "terminal_creacion"})
     terminalCreacion: String ;
   
     @Column({name: "usuario_modificacion"})  

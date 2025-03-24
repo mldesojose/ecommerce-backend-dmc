@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUsuarioDto } from './dto/createUsuario.dto';
 import { UpdateUsuarioDto } from './dto/updateUsuario.dto';
-import { Repository } from 'typeorm';
+import { Any, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsuarioEntity } from './entities/usuario.entity';
+import { Console } from 'console';
 
 @Injectable()
 export class UsuarioService {
@@ -41,17 +42,30 @@ export class UsuarioService {
     return Usuario;
   }
 
-  async findLogin(usuario: String,password: String): Promise<UsuarioEntity> {
-    const Usuario = await this.usuarioRepository.findOne({
-      where: { userName: usuario, password: password },
-    });      
+    async findLogin(usuario: String,pass: String): Promise<UsuarioEntity[]> {    
 
-    if (!Usuario) {
-      throw new Error(`Usuario con login ${usuario} no encontrado`);
+       console.log("usuario:" , usuario);
+       console.log("password:" , pass);
+
+       const usuarioEncontrado = await this.usuarioRepository.find({
+        where: { userName: usuario, password: pass },
+      });
+
+      
+
+      /*
+      const usuarioEncontrado = await this.usuarioRepository.findOneBy({
+        userName: usuario,
+        password: password,
+      });
+      */
+  
+      if (!usuarioEncontrado) {
+        throw new Error(`Usuario con login ${usuarioEncontrado} no encontrado`);
+      }
+  
+      return usuarioEncontrado;
     }
-
-    return Usuario;
-  }
 
   async update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
    // Verificar si el producto existe

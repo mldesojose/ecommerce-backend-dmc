@@ -3,7 +3,6 @@ import { LoginService } from './login.service';
 import { LoginController } from './login.controller';
 import { HttpModule } from '@nestjs/axios';
 import { ConfigModule } from '@nestjs/config';
-import { UsuarioEntity } from './entities/usuario.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LoginHistoryEntity } from './entities/loginHistory.entity';
 
@@ -20,8 +19,9 @@ import { LoginHistoryEntity } from './entities/loginHistory.entity';
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
-      entities: [UsuarioEntity,LoginHistoryEntity],
+      entities: [LoginHistoryEntity],
       synchronize: false,
+      autoLoadEntities: true,
       retryAttempts: 2,
       retryDelay: 1000,
       connectTimeoutMS: 5000,
@@ -29,7 +29,7 @@ import { LoginHistoryEntity } from './entities/loginHistory.entity';
       migrations: [__dirname + "/../migrations/*{.ts,.js}"],
       migrationsTableName: "migrations_history",
     }),
-    TypeOrmModule.forFeature([UsuarioEntity,LoginHistoryEntity])    
+    TypeOrmModule.forFeature([LoginHistoryEntity])    
   ],
   controllers: [LoginController],
   providers: [LoginService],

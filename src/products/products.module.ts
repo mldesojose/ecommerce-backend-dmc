@@ -21,6 +21,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       database: process.env.DATABASE_NAME,
       entities: [ProductEntity],
       synchronize: false,
+      autoLoadEntities: true,
       retryAttempts: 2,
       retryDelay: 1000,
       connectTimeoutMS: 5000,

@@ -5,6 +5,7 @@ import { ProductsModule } from './products/products.module';
 import { LoginModule } from './login/login.module';
 import { SalesModule } from './sales/sales.module';
 import { ValidationPipe } from '@nestjs/common';
+import { UsuarioModule } from './usuario/usuario.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);  
@@ -53,11 +54,8 @@ const usuarioConfig = new DocumentBuilder()
 .build();
 
 const usuarioDocument = SwaggerModule.createDocument(app, usuarioConfig, {
-include: [LoginModule],
+include: [UsuarioModule],
 });
-
-
-
 
   SwaggerModule.setup('apidocs/products', app, productsDocument);
   SwaggerModule.setup('apidocs/login', app, loginDocument);
