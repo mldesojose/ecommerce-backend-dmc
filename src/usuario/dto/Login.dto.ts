@@ -1,12 +1,5 @@
-import { Expose } from 'class-transformer';
-import { IsString } from 'class-validator';
-
+/* eslint-disable prettier/prettier */
 export class LoginDto {
-  //@Expose()
-  //@IsString()
   userName: string;
-
-  //@Expose()
-  //@IsString()
   password: string;
 }

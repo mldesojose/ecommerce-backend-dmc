@@ -1,41 +1,37 @@
-import {
-    Entity,
-    Column,
-    PrimaryGeneratedColumn,
-    CreateDateColumn,    
+/* eslint-disable prettier/prettier */
+import {    
+    Column,    
   } from "typeorm";    
   
   export class AuditoriaEntity {
    
-    //@Column({name: "usuario_creacion", default: "ADMIN"})  
-    @Column({name: "usuario_creacion"})
-    usuarioCreacion: String;
-  
-    //@CreateDateColumn({ name: "fecha_creacion", type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
-    @Column({name: "fecha_creacion"})
-    fechaCreacion: Date;
     
-    //@Column({name: "terminal_creacion", default: "192.168.1.1"})
+    @Column({name: "usuario_creacion"})
+    usuarioCreacion: string;  
+    
+    @Column({name: "fecha_creacion"})
+    fechaCreacion: Date;    
+    
     @Column({name: "terminal_creacion"})
-    terminalCreacion: String ;
+    terminalCreacion: string ;
   
     @Column({name: "usuario_modificacion"})  
-    usuarioModificacion: String;
+    usuarioModificacion: string;
     
     @Column({name:"fecha_modificacion"})  
     fechaModificacion: Date;  
   
     @Column({name:"terminal_modificacion"})
-    terminalModificacion: String;
+    terminalModificacion: string;
     
     @Column({name: "usuario_eliminacion"})  
-    usuarioEliminacion: String;
+    usuarioEliminacion: string;
     
     @Column({name: "fecha_eliminacion"})  
     fechaEliminacion:Date;  
   
     @Column({name: "terminal_eliminacion"})
-    terminalEliminacion:String;
+    terminalEliminacion:string;
  
   }
   

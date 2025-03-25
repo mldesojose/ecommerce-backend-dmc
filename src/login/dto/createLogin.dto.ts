@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Expose } from "class-transformer";
 import { IsBoolean, IsNumber, IsOptional, IsString } from "class-validator";
 

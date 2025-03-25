@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -62,7 +63,7 @@ export class SaleService {
    return this.SaleRepository.findOne({ where: { idVenta: id } });
   }
 
-  async remove(id: number,usario: String,terminal: String) {
+  async remove(id: number,usario: string,terminal: string) {
     await this.SaleRepository.update({ idVenta: id }, 
       { activo: false,
         usuarioEliminacion:usario,

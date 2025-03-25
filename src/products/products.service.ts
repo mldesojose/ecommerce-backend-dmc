@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { CreateProductDto } from './dto/createProduct.dto';
 import { UpdateProductDto } from './dto/updateProduct.dto';
@@ -83,7 +84,7 @@ export class ProductsService {
     return this.productRepository.findOne({ where: { idProducto: id } });
   }
 
-  async remove(id: number,usuario: String,terminal: String) {    
+  async remove(id: number,usuario: string,terminal: string) {    
     await this.productRepository.update({ idProducto: id }, 
       { activo: false,
         usuarioEliminacion:usuario,

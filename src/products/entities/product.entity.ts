@@ -1,9 +1,9 @@
+/* eslint-disable prettier/prettier */
 import { AuditoriaEntity } from "src/shared/entities/auditoria.entity";
 import {
     Entity,
     Column,
     PrimaryGeneratedColumn,
-    Double,    
   } from "typeorm";
     
   @Entity({ name: "producto", schema: "ecomm_obj" })
@@ -14,16 +14,16 @@ import {
     idProducto: number;    
   
     @Column({ name: "nom_producto" })
-    nomProducto: String; 
+    nomProducto: string; 
 
     @Column({ name: "descripcion" })
-    descripcion: String; 
+    descripcion: string; 
   
     @Column({ name: "precio" })
     precio: number;
 
     @Column({ name: "is_oferta" })
-    isOferta: Boolean;
+    isOferta: boolean;
 
     @Column({ name: "porcentaje_oferta" })
     porcentajeOferta: number;

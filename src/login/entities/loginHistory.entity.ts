@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { AuditoriaEntity } from "src/shared/entities/auditoria.entity";
 import {
     Entity,

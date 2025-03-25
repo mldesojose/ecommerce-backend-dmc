@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ValidationPipe, UsePipes } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import {
@@ -50,6 +51,7 @@ export class ProductsController {
   @ApiParam({ name: 'id', type: String })
   @ApiResponse({ status: 200, description: 'Update Product', type: ProductEntity })  
   @Patch(':id')
+  @UsePipes(ValidationPipe)
   async update(@Param('id') id: number, @Body() productEntity: UpdateProductDto) {
     return await this.productsService.update(id, productEntity);
   }

@@ -1,9 +1,9 @@
+/* eslint-disable prettier/prettier */
 import { AuditoriaEntity } from "src/shared/entities/auditoria.entity";
 import {
     Entity,
     Column,
-    PrimaryGeneratedColumn,
-    Double,    
+    PrimaryGeneratedColumn,    
   } from "typeorm";
     
   @Entity({ name: "venta", schema: "ecomm_obj" })
@@ -20,10 +20,10 @@ import {
     idProducto: number; 
   
     @Column({ name: "monto_venta" })
-    montoVenta: Number;
+    montoVenta: number;
 
     @Column({ name: "observacion" })
-    observacion: String;   
+    observacion: string;   
 
     @Column({ name: "activo", default: true })
     activo: boolean;

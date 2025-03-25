@@ -1,5 +1,4 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateSaleDto } from './createSale.dto';
+/* eslint-disable prettier/prettier */
 import { Expose } from 'class-transformer';
 import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 
@@ -15,21 +14,21 @@ export class UpdateSaleDto  {
 
         @Expose()
         @IsNumber({}, { message: 'monto de Venta debe ser un número válido.' })
-        montoVenta: Number;    
+        montoVenta: number;    
         
         @IsOptional() 
-        observacion: String;  
+        observacion: string;  
 
         @Expose()
         @IsBoolean({ message: 'activo debe ser un valor booleano.' })
         activo: boolean;
 
         @IsString({ message: 'ingrese un usuario.' })
-        usuarioModificacion: String;    
+        usuarioModificacion: string;    
     
         @IsOptional() // Opcional, ya que se asignará en el servicio
         fechaModificacion: Date;    
     
         @IsString({ message: 'ingrese la terminal.' })
-        terminalModificacion: String;
+        terminalModificacion: string;
 }

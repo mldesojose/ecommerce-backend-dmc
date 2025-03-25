@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, Query } from '@nestjs/common';
 
 import { CreateUsuarioDto } from './dto/createUsuario.dto';
@@ -12,7 +13,6 @@ import {
  } from '@nestjs/swagger';
 import { UsuarioService } from './usuario.service';
 import { UsuarioEntity } from './entities/usuario.entity';
-import { LoginDto } from './dto/Login.dto';
 
 @ApiTags('Usuario api')
 @Controller('Usuario')
@@ -27,6 +27,7 @@ export class UsuarioController {
   async create(@Body() createUsuarioDto: CreateUsuarioDto):  Promise<UsuarioEntity> {
     return await this.usuarioService.create(createUsuarioDto);
   }
+ 
 
   @ApiOperation({ summary: 'List all Usuario' })
   @ApiResponse({
@@ -45,7 +46,7 @@ export class UsuarioController {
  @Get('login')              
     async findLogin(
       @Query('usuario') userName: string,
-      @Query('terminal') password: string,
+      @Query('password') password: string,
 
     ) {
       return await this.usuarioService.findLogin(userName, password);
@@ -66,6 +67,7 @@ export class UsuarioController {
   @ApiResponse({ status: 200, description: 'Update Usuario', 
     type: UsuarioEntity })  
   @Patch(':id')
+  @UsePipes(ValidationPipe) 
   async update(@Param('id') id: number, @Body() updateUsuarioDto: UpdateUsuarioDto) {
     return await this.usuarioService.update(id, updateUsuarioDto);
   }

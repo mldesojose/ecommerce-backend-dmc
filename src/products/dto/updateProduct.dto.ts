@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Expose } from "class-transformer";
 import { IsBoolean, IsNumber, IsOptional, IsString, Max, Min } from "class-validator";
 import { IsTwoDecimalPlaces } from "src/shared/validator/IsTwoDecimalPlacesConstraint";
@@ -35,11 +36,11 @@ export class UpdateProductDto  {
         activo: boolean;
 
         @IsString({ message: 'ingrese un usuario.' })
-        usuarioModificacion: String;    
+        usuarioModificacion: string;    
     
         @IsOptional() // Opcional, ya que se asignará en el servicio
         fechaModificacion: Date;    
     
         @IsString({ message: 'ingrese la terminal.' })
-        terminalModificacion: String;
+        terminalModificacion: string;
 }

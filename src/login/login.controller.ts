@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, Query } from '@nestjs/common';
+/* eslint-disable prettier/prettier */
+import { Controller,Get, Post, Body, Patch, Param,Delete, UsePipes, ValidationPipe, Query } from '@nestjs/common';
 import { LoginService } from './login.service';
 import { CreateLoginDto } from './dto/createLogin.dto';
 import { UpdateLoginDto } from './dto/updateLogin.dto';
@@ -16,7 +17,6 @@ import { LoginHistoryEntity } from './entities/loginHistory.entity';
 @Controller('login')
 export class LoginController {
   constructor(private readonly loginService: LoginService) {}
-
   @ApiOperation({ summary: 'Create a new LoginHistory' })
   @ApiBody({ type: CreateLoginDto })
   @ApiResponse({ status: 201, description: 'new LoginHistory' })
@@ -52,6 +52,7 @@ export class LoginController {
   @ApiResponse({ status: 200, description: 'Update LoginHistory', 
     type: LoginHistoryEntity })  
   @Patch(':id')
+  @UsePipes(ValidationPipe) 
   async update(@Param('id') id: number, @Body() updateLoginDto: UpdateLoginDto) {
     return await this.loginService.update(id, updateLoginDto);
   }

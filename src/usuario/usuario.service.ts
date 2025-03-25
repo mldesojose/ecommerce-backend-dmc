@@ -1,28 +1,25 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { CreateUsuarioDto } from './dto/createUsuario.dto';
 import { UpdateUsuarioDto } from './dto/updateUsuario.dto';
-import { Any, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsuarioEntity } from './entities/usuario.entity';
-import { Console } from 'console';
+
 
 @Injectable()
 export class UsuarioService {
-
   constructor(
     @InjectRepository(UsuarioEntity)
-    private readonly usuarioRepository: Repository<UsuarioEntity>    
+    private readonly usuarioRepository: Repository<UsuarioEntity>,
   ) {}
 
-  async create(newUsuarioDto: CreateUsuarioDto):Promise<UsuarioEntity> {
-
+  async create(newUsuarioDto: CreateUsuarioDto): Promise<UsuarioEntity> {
     const UsuarioEntity = this.usuarioRepository.create(newUsuarioDto);
     return this.usuarioRepository.save(UsuarioEntity);
-
   }
 
-  
-  async findAll():Promise<UsuarioEntity[]> {
+  async findAll(): Promise<UsuarioEntity[]> {
     const Usuario = await this.usuarioRepository.find({
       where: { activo: true },
     }); // Obtener todos los productos
@@ -30,20 +27,18 @@ export class UsuarioService {
     return Usuario;
   }
 
-  async findLogin(usuario: String,pass: String): Promise<UsuarioEntity> {    
+  async findLogin(usuario: string, pass: string): Promise<UsuarioEntity> {
+    const usuarioEncontrado = await this.usuarioRepository.findOneBy({
+      userName: usuario,
+      password: pass,
+    });
 
-   const usuarioEncontrado = await this.usuarioRepository.findOneBy({
-     userName: usuario,
-     password: pass,
-   });
-   
+    if (!usuarioEncontrado) {
+      throw new Error(`Usuario con login ${usuarioEncontrado} no encontrado`);
+    }
 
-   if (!usuarioEncontrado) {
-     throw new Error(`Usuario con login ${usuarioEncontrado} no encontrado`);
-   }
-
-   return usuarioEncontrado;
- }
+    return usuarioEncontrado;
+  }
 
   async findOne(id: number): Promise<UsuarioEntity> {
     const Usuario = await this.usuarioRepository.findOne({
@@ -57,36 +52,39 @@ export class UsuarioService {
     return Usuario;
   }
 
-
-
   async update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
-   // Verificar si el producto existe
-   const product = await this.usuarioRepository.findOne({ where: { idUsuario: id } });
-   if (!product) {
-     throw new Error('Producto no encontrado');
-   }  
-   
-   // Asignar la fecha actual a fechaModificacion
-   updateUsuarioDto.fechaModificacion = new Date();
+    // Verificar si el producto existe
+    const product = await this.usuarioRepository.findOne({
+      where: { idUsuario: id },
+    });
+    if (!product) {
+      throw new Error('Producto no encontrado');
+    }
 
-   const updateData = {    
-     ...updateUsuarioDto,
-   };
- 
-   // Actualizar el producto en la base de datos
-   await this.usuarioRepository.update({ idUsuario: id }, updateData);
- 
-   // Retornar el producto actualizado (opcional)
-   return this.usuarioRepository.findOne({ where: { idUsuario: id } });
+    // Asignar la fecha actual a fechaModificacion
+    updateUsuarioDto.fechaModificacion = new Date();
+
+    const updateData = {
+      ...updateUsuarioDto,
+    };
+
+    // Actualizar el producto en la base de datos
+    await this.usuarioRepository.update({ idUsuario: id }, updateData);
+
+    // Retornar el producto actualizado (opcional)
+    return this.usuarioRepository.findOne({ where: { idUsuario: id } });
   }
 
-  async remove(id: number,usuario: String,terminal: String) {
-    await this.usuarioRepository.update({ idUsuario: id }, 
-      { activo: false,
-        usuarioEliminacion:usuario,
-        fechaEliminacion: new Date(), 
-        terminalEliminacion: terminal
-       });        
+  async remove(id: number, usuario: string, terminal: string) {
+    await this.usuarioRepository.update(
+      { idUsuario: id },
+      {
+        activo: false,
+        usuarioEliminacion: usuario,
+        fechaEliminacion: new Date(),
+        terminalEliminacion: terminal,
+      },
+    );
     return `Product #${id} deleted`;
   }
 }

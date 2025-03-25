@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CreateSaleDto } from './dto/createSale.dto';
 import { UpdateSaleDto } from './dto/updateSale.dto';
@@ -51,6 +52,7 @@ export class SalesController {
   @ApiResponse({ status: 200, description: 'Update Sale', 
       type: SaleEntity })  
   @Patch(':id')
+  @UsePipes(ValidationPipe) 
   async update(@Param('id') id: number, @Body() updateSaleDto: UpdateSaleDto) {
     return await this.SaleService.update(+id, updateSaleDto);
   }

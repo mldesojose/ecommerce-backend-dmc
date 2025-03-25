@@ -5,31 +5,31 @@ export class UpdateUsuarioDto  {
 
     @Expose()
     @IsString({ message: 'nombre de persona es obligatorio.' })
-    nomPersona: String;     
+    nomPersona: string;     
 
     @Expose()
     @IsString({ message: 'el user name es obligatorio.' })
-    userName: String;       
+    userName: string;       
 
     @Expose()
     @IsString({ message: 'el password es obligatorio.' })
-    password: String;    
+    password: string;    
 
     @Expose()
     @IsString({ message: 'el rol es obligatorio.' })
-    rol: String;    
+    rol: string;    
 
     @Expose()
     @IsBoolean({ message: 'activo debe ser un valor booleano.' })
     activo: boolean;
 
     @IsString({ message: 'ingrese un usuario.' })
-    usuarioModificacion: String;    
+    usuarioModificacion: string;    
 
     @IsOptional() // Opcional, ya que se asignará en el servicio
     fechaModificacion: Date;    
 
     @IsString({ message: 'ingrese la terminal.' })
-    terminalModificacion: String;
+    terminalModificacion: string;
 
 }

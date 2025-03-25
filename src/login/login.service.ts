@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { CreateLoginDto } from './dto/createLogin.dto';
 import { UpdateLoginDto } from './dto/updateLogin.dto';
@@ -62,7 +63,7 @@ export class LoginService {
    return this.loginRepository.findOne({ where: { idLogin: id } });
   }
 
-  async remove(id: number,usuario: String,terminal: String) {
+  async remove(id: number,usuario: string,terminal: string) {
     await this.loginRepository.update({ idLogin: id }, 
       { activo: false,
         usuarioEliminacion:usuario,
