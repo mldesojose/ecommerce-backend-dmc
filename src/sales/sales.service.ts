@@ -5,33 +5,93 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { SaleEntity } from './entities/sale.entity';
 import { CreateSaleDto } from './dto/createSale.dto';
 import { UpdateSaleDto } from './dto/updateSale.dto';
+import { DetSaleEntity } from './entities/detVentaentity';
 
 @Injectable()
 export class SaleService {
 
   constructor(
     @InjectRepository(SaleEntity)
-    private readonly SaleRepository: Repository<SaleEntity>    
+    private readonly saleRepository: Repository<SaleEntity>,    
+    @InjectRepository(DetSaleEntity)
+    private readonly detVentaRepository: Repository<DetSaleEntity>,
   ) {}
 
-  async create(newSaleDto: CreateSaleDto):Promise<SaleEntity> {
+  async create(newSaleDto: CreateSaleDto[]):Promise<SaleEntity> {
 
-    const SaleEntity = this.SaleRepository.create(newSaleDto);
-    return this.SaleRepository.save(SaleEntity);
+    if (!newSaleDto || newSaleDto.length === 0) {
+      throw new Error('Debe proporcionar al menos un item de venta');
+    }
+
+    // Obtener el primer elemento para datos comunes
+    const firstItem = newSaleDto[0];
+    
+    // Calcular el monto total de la venta
+    const montoVenta = newSaleDto.reduce((sum, item) => sum + item.precioFinal, 0);
+
+    // Crear la venta principal
+    const sale = new SaleEntity();
+    sale.idUsuario = firstItem.idUsuario;
+    sale.montoVenta = montoVenta;
+    sale.observacion = firstItem.observacion || '';
+    sale.activo = firstItem.activo;
+    sale.usuarioCreacion = firstItem.usuarioCreacion;
+    sale.terminalCreacion = firstItem.terminalCreacion;
+    sale.fechaCreacion = new Date();
+
+    // Usamos una transacción para atomicidad
+    return await this.saleRepository.manager.transaction(async (transactionalEntityManager) => {
+      // Guardar la venta principal
+      const savedSale = await transactionalEntityManager.save(SaleEntity, sale);
+
+      // Crear y guardar los detalles de venta
+      const detallesPromises = newSaleDto.map((item, index) => {
+        const detalle = new DetSaleEntity();
+        detalle.idVenta = savedSale.idVenta;
+        detalle.item = index + 1;
+        detalle.idProducto = item.idProducto;
+        detalle.precio = item.precio;
+        detalle.porcentajeOferta = item.porcentajeOferta || 0;
+        detalle.precioFinal = item.precioFinal;
+        detalle.activo = item.activo;
+        detalle.usuarioCreacion = item.usuarioCreacion;
+        detalle.terminalCreacion = item.terminalCreacion;
+        detalle.fechaCreacion = new Date();
+        
+        return transactionalEntityManager.save(DetSaleEntity, detalle);
+      });
+
+      await Promise.all(detallesPromises);
+
+      return savedSale;
+    });
+
 
   }
 
   
   async findAll():Promise<SaleEntity[]> {
-    const Sale = await this.SaleRepository.find({
+    const Sale = await this.saleRepository.find({
       where: { activo: true },
     }); // Obtener todos los productos
     // Transformar ProductEntity a CreateProductDto
     return Sale;
   }
 
+  async findDetSale(id: number): Promise<DetSaleEntity[]> {
+    const detSale = await this.detVentaRepository.find({
+      where: { idVenta: id },
+    });
+
+    if (!detSale) {
+      throw new Error(`Detalle de Sale with id ${id} not found`);
+    }
+
+    return detSale;
+  }
+
   async findOne(id: number): Promise<SaleEntity> {
-    const Sale = await this.SaleRepository.findOne({
+    const Sale = await this.saleRepository.findOne({
       where: { idVenta: id },
     });
 
@@ -44,7 +104,7 @@ export class SaleService {
 
   async update(id: number, updateSaleDto: UpdateSaleDto) {
    // Verificar si el producto existe
-   const product = await this.SaleRepository.findOne({ where: { idVenta: id } });
+   const product = await this.saleRepository.findOne({ where: { idVenta: id } });
    if (!product) {
      throw new Error('Producto no encontrado');
    }  
@@ -57,14 +117,14 @@ export class SaleService {
    };
  
    // Actualizar el producto en la base de datos
-   await this.SaleRepository.update({ idVenta: id }, updateData);
+   await this.saleRepository.update({ idVenta: id }, updateData);
  
    // Retornar el producto actualizado (opcional)
-   return this.SaleRepository.findOne({ where: { idVenta: id } });
+   return this.saleRepository.findOne({ where: { idVenta: id } });
   }
 
   async remove(id: number,usario: string,terminal: string) {
-    await this.SaleRepository.update({ idVenta: id }, 
+    await this.saleRepository.update({ idVenta: id }, 
       { activo: false,
         usuarioEliminacion:usario,
         fechaEliminacion: new Date(), 

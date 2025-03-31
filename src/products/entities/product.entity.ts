@@ -22,6 +22,9 @@ import {
     @Column({ name: "precio" })
     precio: number;
 
+    @Column({ name: "imgurl" })
+    imgUrl: string;
+
     @Column({ name: "is_oferta" })
     isOferta: boolean;
 

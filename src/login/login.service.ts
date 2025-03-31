@@ -25,8 +25,7 @@ export class LoginService {
   async findAll():Promise<LoginHistoryEntity[]> {
     const login = await this.loginRepository.find({
       where: { activo: true },
-    }); // Obtener todos los productos
-    // Transformar ProductEntity a CreateProductDto
+    }); 
     return login;
   }
 

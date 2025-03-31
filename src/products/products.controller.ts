@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ValidationPipe, UsePipes } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ValidationPipe, UsePipes, HttpException, HttpStatus } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import {
   ApiOperation,
@@ -66,8 +66,16 @@ export class ProductsController {
     @Param('id') id: string,    
     @Query('usuario') usuario: string,
     @Query('terminal') terminal: string,
-
   ) {
-    return await this.productsService.remove(+id,usuario,terminal);
+    try {
+      await this.productsService.remove(+id, usuario, terminal);
+      return { success: true, message: 'Producto eliminado correctamente' };
+    } catch (error) {
+      throw new HttpException({
+        success: false,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        message: 'Error al eliminar el producto' + error.message,
+      }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 }

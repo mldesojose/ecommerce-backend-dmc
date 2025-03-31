@@ -7,12 +7,21 @@ import { LoginModule } from './login/login.module';
 import { SalesModule } from './sales/sales.module';
 import { ValidationPipe } from '@nestjs/common';
 import { UsuarioModule } from './usuario/usuario.module';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);  
+  const applicativo = await NestFactory.create<NestExpressApplication>(AppModule);
   app.useGlobalPipes(new ValidationPipe({ transform: true })); // Habilita la validación global
 
   app.setGlobalPrefix('api');
+    
+  applicativo.set('trust proxy', true);
+
+  app.enableCors({
+    origin: "*",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  });
 
   const productsConfig = new DocumentBuilder()
     .setTitle('Products API')

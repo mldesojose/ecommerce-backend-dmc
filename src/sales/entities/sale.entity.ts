@@ -14,10 +14,7 @@ import {
     idVenta: number;    
   
     @Column({ name: "id_usuario" })
-    idUsuario: number; 
-
-    @Column({ name: "id_producto" })
-    idProducto: number; 
+    idUsuario: number;   
   
     @Column({ name: "monto_venta" })
     montoVenta: number;

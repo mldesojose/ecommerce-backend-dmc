@@ -18,7 +18,7 @@ export class ProductsService {
     if (newProducto.isOferta) {
 
       newProducto.precioFinal =
-        newProducto.precio - newProducto.precio * newProducto.porcentajeOferta;
+        newProducto.precio - newProducto.precio * (newProducto.porcentajeOferta/100.00);
 
     } else {
       newProducto.precioFinal = newProducto.precio;
@@ -33,9 +33,10 @@ export class ProductsService {
 
     const products = await this.productRepository.find({
       where: { activo: true },
-    }); // Obtener todos los productos
-
-    // Transformar ProductEntity a CreateProductDto
+      order: {
+        idProducto: 'ASC' 
+      }
+    });     
     return products;
   }
 
@@ -65,7 +66,7 @@ export class ProductsService {
         throw new Error('porcentajeOferta es requerido cuando isOferta es true');
       }
       newProducto.precioFinal =
-        newProducto.precio - newProducto.precio * newProducto.porcentajeOferta;
+        newProducto.precio - newProducto.precio * (newProducto.porcentajeOferta/100.00);
     } else {
       newProducto.precioFinal = newProducto.precio;
     }

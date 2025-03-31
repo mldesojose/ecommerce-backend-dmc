@@ -12,6 +12,7 @@ import {
  } from '@nestjs/swagger';
 import { SaleService } from './sales.service';
 import { SaleEntity } from './entities/sale.entity';
+import { DetSaleEntity } from './entities/detVentaentity';
 
 @ApiTags('Sales api')
 @Controller('sales')
@@ -23,8 +24,8 @@ export class SalesController {
   @ApiResponse({ status: 201, description: 'new Sale' })
   @Post()
   @UsePipes(ValidationPipe) 
-  async create(@Body() createSaleDto: CreateSaleDto):  Promise<SaleEntity> {
-    return await this.SaleService.create(createSaleDto);
+  async create(@Body() createSaleDto: CreateSaleDto[]):  Promise<SaleEntity> {
+    return await this.SaleService.create(createSaleDto);        
   }
 
   @ApiOperation({ summary: 'List all Sales' })
@@ -46,6 +47,16 @@ export class SalesController {
   async findOne(@Param('id') id: number) {
     return await this.SaleService.findOne(id);
   }
+
+
+    @ApiOperation({ summary: 'Detalle de Ventas' })
+    @ApiResponse({ status: 200, description: 'Datos de los productos vendidos' })   
+    @Get('detalle/:id') 
+    async findUsuario(
+      @Param('id') id: number
+    ): Promise<DetSaleEntity[]> {
+      return await this.SaleService.findDetSale(id);
+    }
 
   @ApiOperation({ summary: 'Update a Sale' })
   @ApiParam({ name: 'id', type: String })

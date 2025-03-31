@@ -6,10 +6,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { HttpModule } from '@nestjs/axios';
 import { ConfigModule } from '@nestjs/config';
 import { UsuarioEntity } from './entities/usuario.entity';
+import { AuthModule } from 'src/auth/auth.module';
+import { LoginService } from 'src/login/login.service';
+import { LoginHistoryEntity } from 'src/login/entities/loginHistory.entity';
+
 
 @Module({
     imports: [
-      HttpModule,
+      AuthModule,
+      HttpModule,      
       ConfigModule.forRoot({
         isGlobal: true,
       }),
@@ -29,9 +34,9 @@ import { UsuarioEntity } from './entities/usuario.entity';
         migrations: [__dirname + "/../migrations/*{.ts,.js}"],
         migrationsTableName: "migrations_history",
       }),
-      TypeOrmModule.forFeature([UsuarioEntity])    
+      TypeOrmModule.forFeature([UsuarioEntity,LoginHistoryEntity])    
     ],
   controllers: [UsuarioController],
-  providers: [UsuarioService],
+  providers: [UsuarioService,LoginService],
 })
 export class UsuarioModule {}
