@@ -12,8 +12,8 @@ import {
  } from '@nestjs/swagger';
 import { SaleService } from './sales.service';
 import { SaleEntity } from './entities/sale.entity';
-import { DetSaleEntity } from './entities/detVentaentity';
 import { DetSaleResponseDto } from './dto/detSaleResponse.dto';
+import { SaleResponseDto } from './dto/saleResponse.dto';
 
 @ApiTags('Sales api')
 @Controller('sales')
@@ -33,10 +33,10 @@ export class SalesController {
   @ApiResponse({
       status: 200,
       description: 'List of Sales',
-      type: [SaleEntity],
+      type: [SaleResponseDto],
     })
   @Get()
-  async findAll()  : Promise<SaleEntity[]> {
+  async findAll()  : Promise<SaleResponseDto[]> {
     return await this.SaleService.findAll();
   }
 

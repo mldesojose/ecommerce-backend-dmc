@@ -1,9 +1,12 @@
 /* eslint-disable prettier/prettier */
 import { AuditoriaEntity } from "src/shared/entities/auditoria.entity";
+import { UsuarioEntity } from "src/usuario/entities/usuario.entity";
 import {
     Entity,
     Column,
-    PrimaryGeneratedColumn,    
+    PrimaryGeneratedColumn,
+    ManyToOne,
+    JoinColumn,      
   } from "typeorm";
     
   @Entity({ name: "venta", schema: "ecomm_obj" })
@@ -14,7 +17,12 @@ import {
     idVenta: number;    
   
     @Column({ name: "id_usuario" })
-    idUsuario: number;   
+    idUsuario: number;  
+    
+    @ManyToOne(() => UsuarioEntity, (usuario) => usuario.idUsuario)
+    @JoinColumn({ name: 'id_usuario' }) 
+    usuario: UsuarioEntity; 
+
   
     @Column({ name: "monto_venta" })
     montoVenta: number;

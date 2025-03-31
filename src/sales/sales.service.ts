@@ -7,6 +7,7 @@ import { CreateSaleDto } from './dto/createSale.dto';
 import { UpdateSaleDto } from './dto/updateSale.dto';
 import { DetSaleEntity } from './entities/detVentaentity';
 import { DetSaleResponseDto } from './dto/detSaleResponse.dto';
+import { SaleResponseDto } from './dto/saleResponse.dto';
 
 @Injectable()
 export class SaleService {
@@ -71,12 +72,19 @@ export class SaleService {
   }
 
   
-  async findAll():Promise<SaleEntity[]> {
-    const Sale = await this.saleRepository.find({
+  async findAll():Promise<SaleResponseDto[]> {
+    const sale = await this.saleRepository.find({
       where: { activo: true },
-    }); // Obtener todos los productos
-    // Transformar ProductEntity a CreateProductDto
-    return Sale;
+      relations: ['usuario'],
+    }); 
+    return sale.map((item) => ({
+      idVenta: item.idVenta,
+      idUsuario: item.usuario.idUsuario,
+      nomPersona: item.usuario.nomPersona,      
+      montoVenta: item.montoVenta,
+      observacion: item.observacion,      
+      activo: item.activo,
+    })); 
   }
 
   async findDetSale(id: number): Promise<DetSaleResponseDto[]> {
