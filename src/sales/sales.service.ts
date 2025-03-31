@@ -75,8 +75,7 @@ export class SaleService {
   async findAll():Promise<SaleResponseDto[]> {
     const sale = await this.saleRepository.find({
       where: { activo: true },
-      relations: ['usuario'],
-    }); 
+      relations: ['usuario'],     }); 
     return sale.map((item) => ({
       idVenta: item.idVenta,
       idUsuario: item.usuario.idUsuario,

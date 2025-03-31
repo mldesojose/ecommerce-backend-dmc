@@ -23,7 +23,6 @@ import {
     @JoinColumn({ name: 'id_usuario' }) 
     usuario: UsuarioEntity; 
 
-  
     @Column({ name: "monto_venta" })
     montoVenta: number;
 

@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { SaleEntity } from './entities/sale.entity';
 import { SaleService } from './sales.service';
 import { DetSaleEntity } from './entities/detVentaentity';
+import { UsuarioEntity } from 'src/usuario/entities/usuario.entity';
 
 @Module({
     imports: [
@@ -21,7 +22,7 @@ import { DetSaleEntity } from './entities/detVentaentity';
         username: process.env.DATABASE_USER,
         password: process.env.DATABASE_PASSWORD,
         database: process.env.DATABASE_NAME,
-        entities: [SaleEntity,DetSaleEntity],
+        entities: [SaleEntity,DetSaleEntity,UsuarioEntity],
         synchronize: false,
         autoLoadEntities: true,
         retryAttempts: 2,
@@ -31,7 +32,7 @@ import { DetSaleEntity } from './entities/detVentaentity';
         migrations: [__dirname + "/../migrations/*{.ts,.js}"],
         migrationsTableName: "migrations_history",
       }),
-      TypeOrmModule.forFeature([SaleEntity,DetSaleEntity])    
+      TypeOrmModule.forFeature([SaleEntity,DetSaleEntity,UsuarioEntity])    
     ],
   controllers: [SalesController],
   providers: [SaleService],
