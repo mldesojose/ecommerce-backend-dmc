@@ -1,9 +1,12 @@
 /* eslint-disable prettier/prettier */
+import { ProductEntity } from "src/products/entities/product.entity";
 import { AuditoriaEntity } from "src/shared/entities/auditoria.entity";
 import {
     Entity,
     Column,
-    PrimaryColumn,    
+    PrimaryColumn,
+    ManyToOne,
+    JoinColumn,    
   } from "typeorm";
     
   @Entity({ name: "det_venta", schema: "ecomm_obj" })
@@ -15,6 +18,10 @@ import {
   
     @PrimaryColumn({ name: "item" })
     item: number; 
+
+    @ManyToOne(() => ProductEntity, (product) => product.idProducto)
+    @JoinColumn({ name: 'id_producto' }) // Ajusta el nombre de la columna FK si es diferente
+    producto!: ProductEntity; // Cambia el nombre si prefieres, pero asegúrate de que coincida con la relación
 
     @Column({ name: "id_producto" })
     idProducto: number; 
@@ -30,6 +37,8 @@ import {
 
     @Column({ name: "activo", default: true })
     activo: boolean;
+
+    
 
   }
   

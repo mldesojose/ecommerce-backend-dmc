@@ -6,6 +6,7 @@ import { SaleEntity } from './entities/sale.entity';
 import { CreateSaleDto } from './dto/createSale.dto';
 import { UpdateSaleDto } from './dto/updateSale.dto';
 import { DetSaleEntity } from './entities/detVentaentity';
+import { DetSaleResponseDto } from './dto/detSaleResponse.dto';
 
 @Injectable()
 export class SaleService {
@@ -78,17 +79,27 @@ export class SaleService {
     return Sale;
   }
 
-  async findDetSale(id: number): Promise<DetSaleEntity[]> {
+  async findDetSale(id: number): Promise<DetSaleResponseDto[]> {
     const detSale = await this.detVentaRepository.find({
       where: { idVenta: id },
+      relations: ['producto'],
     });
 
-    if (!detSale) {
+    if (!detSale || detSale.length === 0) {
       throw new Error(`Detalle de Sale with id ${id} not found`);
     }
 
-    return detSale;
-  }
+    return detSale.map((item) => ({
+      idVenta: item.idVenta,
+      item: item.item,
+      idProducto: item.producto.idProducto,
+      nomProducto: item.producto.nomProducto, // Accede al nombre del producto
+      precio: item.precio,
+      porcentajeOferta: item.porcentajeOferta,
+      precioFinal: item.precioFinal,
+      activo: item.activo,
+    }));
+}
 
   async findOne(id: number): Promise<SaleEntity> {
     const Sale = await this.saleRepository.findOne({

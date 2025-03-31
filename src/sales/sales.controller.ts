@@ -13,6 +13,7 @@ import {
 import { SaleService } from './sales.service';
 import { SaleEntity } from './entities/sale.entity';
 import { DetSaleEntity } from './entities/detVentaentity';
+import { DetSaleResponseDto } from './dto/detSaleResponse.dto';
 
 @ApiTags('Sales api')
 @Controller('sales')
@@ -54,7 +55,7 @@ export class SalesController {
     @Get('detalle/:id') 
     async findUsuario(
       @Param('id') id: number
-    ): Promise<DetSaleEntity[]> {
+    ): Promise<DetSaleResponseDto[]> {
       return await this.SaleService.findDetSale(id);
     }
 
